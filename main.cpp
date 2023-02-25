@@ -33,14 +33,12 @@ private:
 		}
 	}
 
-	void generatePassword()
+	void generatePassword(char* arr, int N)
 	{
 		char alphabet[] = { 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
 
 		char special_chars[] = { '!', '@', '#', '$', '%', '^', '&', '*', '|', '?' };
 
-		srand(time(NULL));
-		shuffle(alphabet, sizeof(alphabet));
 		random_device rd;
 		mt19937 gen(rd());
 		
@@ -48,26 +46,27 @@ private:
 
 		if (SpecChar) // Если TRUE то генерируется пароль с добавление в конец массива специального символа.
 		{
-			for (int i = 0; i < PasswordSize - 1; i++)
+			for (int i = 0; i < N - 1; i++)
 			{
 				uniform_int_distribution<> dis(0, sizeof(alphabet));
+				shuffle(alphabet, sizeof(alphabet));
 				int value = dis(gen);
-				Password[i] = alphabet[value];
+				arr[i] = alphabet[value];
 			}
 			//Добавление специального символа в конец
 			uniform_int_distribution<> dis(0, sizeof(special_chars));
 			int value = dis(gen);
-			Password[PasswordSize - 1] = special_chars[value];
+			arr[N - 1] = special_chars[value];
 
-			shuffle(Password, PasswordSize); //Перемешивание готового пароля
+			shuffle(arr, N); //Перемешивание готового пароля
 		}
 		else
 		{
-			for (int i = 0; i < PasswordSize; i++)
+			for (int i = 0; i < N; i++)
 			{
 				uniform_int_distribution<> dis(0, sizeof(alphabet));
 				int value = dis(gen);
-				Password[i] = alphabet[value];
+				arr[i] = alphabet[value];
 			}
 		}
 	}
@@ -98,7 +97,7 @@ public:
 				PasswordSize = PassSize;
 				Password = new char[PasswordSize];
 
-				generatePassword();
+				generatePassword(Password, PasswordSize);
 
 				return 1;
 			}
