@@ -1,19 +1,22 @@
 #pragma once
+#include <string>
+
 class PasswordGenerator
 {
 public:
 
 	PasswordGenerator();
-	int Run();
+	int Run(int PassSize, bool SpecChar);
 
-	void printPassword();
+	std::string printPassword();
 
 	void savePassword();
 private:
 
 	char* Password;
-	int PasswordSize = 0;
-	bool SpecChar = true;
+	int PasswordSize;
+	bool YesOrNo;
+	std::string FinishPass;
 
 	void shuffle(char* arr, int N);
 

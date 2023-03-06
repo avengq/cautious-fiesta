@@ -1,32 +1,28 @@
 #include "PasswordGenerator.h"
 #include <iostream>
 #include <time.h>
-#include <stdlib.h>
 #include <fstream>
-#include <Windows.h>
 #include <random>
+
+
 
 PasswordGenerator::PasswordGenerator()
 {
 	Password = nullptr;
+	PasswordSize = 0;
+	YesOrNo = true;
+	FinishPass = "";
 }
 
-int PasswordGenerator::Run()
+int PasswordGenerator::Run(int PassSize, bool SpecChar)
 {
-	int PassSize = 0, YesOrNo = 0;
+
 	while (true)
 	{
-		std::cout << "Нужны ли специальные символы в пароле? 1 - да, 0 - нет: ";
-		std::cin >> YesOrNo;
-		std::cout << std::endl;
+		YesOrNo = SpecChar;
 
-		if (YesOrNo == 1 || YesOrNo == 0)
+		if (YesOrNo == true || YesOrNo == false)
 		{
-			std::cout << "Введите длину пароля: ";
-			std::cin >> PassSize;
-			std::cout << std::endl;
-
-			SpecChar = YesOrNo;
 			PasswordSize = PassSize;
 			Password = new char[PasswordSize];
 
@@ -42,15 +38,16 @@ int PasswordGenerator::Run()
 	}
 }
 
-void PasswordGenerator::printPassword()
+std::string PasswordGenerator::printPassword()
 {
 	if (Password != nullptr)
 	{
 		for (int i = 0; i < PasswordSize; i++)
 		{
-			std::cout << Password[i];
+			FinishPass += Password[i];
 		}
 	}
+	return FinishPass;
 }
 
 void PasswordGenerator::savePassword()
@@ -94,9 +91,11 @@ void PasswordGenerator::generatePassword(char* arr, int N)
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
+	FinishPass.clear();
 
 
-	if (SpecChar) // 
+
+	if (YesOrNo) // Если TRUE то генерируется пароль с добавление в конец массива специального символа.
 	{
 		for (int i = 0; i < N - 1; i++)
 		{
@@ -105,12 +104,12 @@ void PasswordGenerator::generatePassword(char* arr, int N)
 			int value = dis(gen);
 			arr[i] = alphabet[value];
 		}
-		//
+		//Добавление специального символа в конец.
 		std::uniform_int_distribution<> dis(0, sizeof(special_chars));
 		int value = dis(gen);
 		arr[N - 1] = special_chars[value];
 
-		shuffle(arr, N); //
+		shuffle(arr, N); //Перемешивание готового пароля.
 	}
 	else
 	{
@@ -121,6 +120,10 @@ void PasswordGenerator::generatePassword(char* arr, int N)
 			arr[i] = alphabet[value];
 		}
 	}
+}
+PasswordGenerator::~PasswordGenerator()
+{
+	delete[] Password;
 }
 
 
