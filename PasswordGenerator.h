@@ -13,14 +13,11 @@ public:
 	void savePassword();
 private:
 
-	char* Password;
 	int PasswordSize;
 	bool YesOrNo;
 	std::string FinishPass;
 
-	void shuffle(char* arr, int N);
-
-	void generatePassword(char* arr, int N);
+	void generatePassword(int N);
 
 	
 };
